@@ -121,6 +121,7 @@ func genPrivKey(rand io.Reader) PrivKey {
 // NOTE: secret should be the output of a KDF like bcrypt,
 // if it's derived from user input.
 func GenPrivKeyFromSecret(secret []byte) PrivKey {
+	fmt.Println("using bip39 branch")
 	seed, err := bip39.EntropyFromMnemonic(string(secret))
 	if err != nil {
 		panic(err)
