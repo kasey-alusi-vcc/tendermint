@@ -11,6 +11,7 @@ import (
 	"github.com/tendermint/tendermint/crypto"
 	"github.com/tendermint/tendermint/crypto/tmhash"
 	tmjson "github.com/tendermint/tendermint/libs/json"
+	"github.com/tyler-smith/go-bip39"
 )
 
 //-------------------------------------
@@ -120,8 +121,11 @@ func genPrivKey(rand io.Reader) PrivKey {
 // NOTE: secret should be the output of a KDF like bcrypt,
 // if it's derived from user input.
 func GenPrivKeyFromSecret(secret []byte) PrivKey {
-	seed := crypto.Sha256(secret) // Not Ripemd160 because we want 32 bytes.
-
+	fmt.Println("using bip39 branch")
+	seed, err := bip39.EntropyFromMnemonic(string(secret))
+	if err != nil {
+		panic(err)
+	}
 	return PrivKey(ed25519.NewKeyFromSeed(seed))
 }
 
